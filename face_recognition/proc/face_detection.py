@@ -2,6 +2,7 @@ from typing import List
 import degirum as dg
 import degirum_tools
 
+from face_recognition.proc.profiler import timed
 
 class HostedModel:
     def __init__(self):
@@ -26,14 +27,15 @@ class DetectionModel(HostedModel):
         )
         pass
 
+    @timed
     def scan(self, path: str):
         detected_faces = self.model(path)
         return detected_faces
 
+    @timed
     def batch_scan(self, path: List[str]):
-        detected_faces = self.model.predict_batch(path)
-         
-        return detected_faces
+        detected_faces_batch = self.model.predict_batch(path)
+        return list(detected_faces_batch)
     
 
 class EmbeddingModel(HostedModel):
@@ -48,6 +50,7 @@ class EmbeddingModel(HostedModel):
             token=self.token
         )
     
+    @timed
     def extract_face_embedding(self, image):
         face_embedding = self.model(image).results[0]["data"][0]
         return face_embedding

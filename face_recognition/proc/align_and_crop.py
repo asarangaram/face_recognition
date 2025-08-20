@@ -1,6 +1,8 @@
 import numpy as np
 import cv2
+from face_recognition.proc.profiler import timed
 
+@timed
 def align_and_crop(img, landmarks, image_size=112):
     """
     Align and crop the face from the image based on the given landmarks.

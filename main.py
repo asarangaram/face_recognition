@@ -81,5 +81,5 @@ if rebuild_store:
     faces = available_faces(
         "/home/anandas/demos/degirum_hailo_examples/assets/Friends_dataset"
     )
-    face_ids = recogniser.register_faces(faces)
+    face_ids = recogniser.register_faces_no_batch(faces)
     print(face_ids)

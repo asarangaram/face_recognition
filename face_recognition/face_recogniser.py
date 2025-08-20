@@ -133,7 +133,7 @@ class FaceRecognizer:
         image_files = [t[1] for t in faces]
 
         detector = DetectionModel()
-        detected_faces_batch = list(detector.batch_scan(path=image_files))
+        detected_faces_batch = detector.batch_scan(path=image_files)
 
         embedding_model = EmbeddingModel()
         embedding = []
