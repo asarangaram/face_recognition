@@ -4,9 +4,9 @@ from sqlalchemy.exc import SQLAlchemyError
 import uuid
 
 
-def db_create_table_registered_faces(db, dbModel, face_dir):
+def db_create_table_registered_faces(db, dbModel, face_dir, table_name):
     class RegisteredFace(dbModel):
-        __tablename__ = "face"
+        __tablename__ = table_name
 
         id = db.Column(
             db.String(36), primary_key=True, default=lambda: str(uuid.uuid4())
@@ -15,7 +15,7 @@ def db_create_table_registered_faces(db, dbModel, face_dir):
         person_id = db.Column(db.Integer, db.ForeignKey("person.id"), nullable=False)
 
         # Relationship back to Person
-        person = relationship("Person", back_populates="faces")
+        person = relationship("person", back_populates="faces")
 
         def __init__(self, person_id: int, path: str, _allow_direct_init: bool = False):
             if not _allow_direct_init:

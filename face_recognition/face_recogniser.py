@@ -35,6 +35,19 @@ class RegisteredFace:
 
 
 class FaceRecognizer:
+    face_table_name = "face"
+    face_vector_table = "face"
+    person_table_name = "person"
+     
+    @classmethod
+    def vector_tables(cls):
+        return [cls.face_vector_table]
+    
+
+    @classmethod
+    def tables(cls):
+        return [cls.face_table_name, cls.person_table_name]
+
     def __init__(
         self, db, dbModel, vectordb, face_dir: str, is_interactive: bool = False
     ):
@@ -44,10 +57,10 @@ class FaceRecognizer:
         self.face_dir = face_dir
         self.is_interactive = is_interactive
 
-        self.RegisteredFace = db_create_table_registered_faces(db, dbModel)
-        self.RegisteredPerson = db_create_table_registered_person(db, dbModel)
+        self.RegisteredFace = db_create_table_registered_faces(db, dbModel, face_dir=self.face_dir, table_name=self.face_table_name)
+        self.RegisteredPerson = db_create_table_registered_person(db, dbModel, table_name=self.person_table_name)
         
-        self.faceVectorStore = FaceVectorStore(vectordb, table_name="face")
+        self.faceVectorStore = FaceVectorStore(vectordb, table_name=self.face_vector_table)
 
     def register_face(
         self, path: str, person_id: int = None, person_name: str = None

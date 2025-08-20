@@ -23,8 +23,8 @@ class LanceTableManager:
             raise RuntimeError(f"Table {table_name} has a different schema.")
 
 class FaceVectorStore(LanceTableManager):
-    def __init__(self, db):
-        super().__init__(db, table_name="face", schema=FaceRecognitionSchema)
+    def __init__(self, db, table_name:str):
+        super().__init__(db, table_name=table_name, schema=FaceRecognitionSchema)
     
     def add(self, id: str, vector: Annotated[List[float], Vector(512)]):
         self.tbl.add([

@@ -1,0 +1,95 @@
+[2025-08-20 14:05:40.949] [23761] [HailoRT] [info] [device.cpp:49] [Device] OS Version: Linux 6.12.34+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.34-1+rpt1~bookworm (2025-06-26) aarch64
+[2025-08-20 14:05:40.951] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:05:40.952] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:05:41.001] [23761] [HailoRT] [info] [device.cpp:49] [Device] OS Version: Linux 6.12.34+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.34-1+rpt1~bookworm (2025-06-26) aarch64
+[2025-08-20 14:05:41.003] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:05:41.004] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:05:41.058] [23904] [HailoRT] [info] [device.cpp:49] [Device] OS Version: Linux 6.12.34+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.34-1+rpt1~bookworm (2025-06-26) aarch64
+[2025-08-20 14:05:41.059] [23904] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:05:41.061] [23904] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:05:41.080] [23904] [HailoRT] [info] [vdevice.cpp:523] [create] Creating vdevice with params: device_count: 1, scheduling_algorithm: ROUND_ROBIN, multi_process_service: true
+[2025-08-20 14:05:42.087] [23904] [HailoRT] [info] [device.cpp:49] [Device] OS Version: Linux 6.12.34+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.34-1+rpt1~bookworm (2025-06-26) aarch64
+[2025-08-20 14:05:42.088] [23904] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:05:42.110] [23904] [HailoRT] [info] [hef.cpp:1929] [get_network_group_and_network_name] No name was given. Addressing all networks of default network_group: retinaface_mobilenet_v1
+[2025-08-20 14:05:42.110] [23904] [HailoRT] [info] [hef.cpp:1929] [get_network_group_and_network_name] No name was given. Addressing all networks of default network_group: retinaface_mobilenet_v1
+[2025-08-20 14:05:42.184] [23904] [HailoRT] [info] [infer_model.cpp:436] [configure] Configuring network group 'retinaface_mobilenet_v1' with params: batch size: 0, power mode: ULTRA_PERFORMANCE, latency: NONE
+[2025-08-20 14:05:42.186] [23904] [HailoRT] [info] [multi_io_elements.cpp:756] [create] Created (AsyncHwEl)
+[2025-08-20 14:05:42.187] [23904] [HailoRT] [info] [queue_elements.cpp:450] [create] Created (EntryPushQEl0retinaface_mobilenet_v1/input_layer1 | timeout: 10s)
+[2025-08-20 14:05:42.187] [23904] [HailoRT] [info] [edge_elements.cpp:187] [create] Created (LastAsyncEl0AsyncHwEl)
+[2025-08-20 14:05:42.187] [23904] [HailoRT] [info] [edge_elements.cpp:187] [create] Created (LastAsyncEl1AsyncHwEl)
+[2025-08-20 14:05:42.188] [23904] [HailoRT] [info] [queue_elements.cpp:450] [create] Created (PushQEl5AsyncHwEl | timeout: 10s)
+[2025-08-20 14:05:42.188] [23904] [HailoRT] [info] [filter_elements.cpp:375] [create] Created (PostInferEl5AsyncHwEl | Reorder - src_order: FCR, src_shape: (92, 160, 24), dst_order: FCR, dst_shape: (92, 160, 20))
+[2025-08-20 14:05:42.188] [23904] [HailoRT] [info] [edge_elements.cpp:187] [create] Created (LastAsyncEl0PostInferEl5AsyncHwEl)
+[2025-08-20 14:05:42.188] [23904] [HailoRT] [info] [queue_elements.cpp:450] [create] Created (PushQEl6AsyncHwEl | timeout: 10s)
+[2025-08-20 14:05:42.188] [23904] [HailoRT] [info] [filter_elements.cpp:375] [create] Created (PostInferEl6AsyncHwEl | Reorder - src_order: NHCW, src_shape: (23, 40, 4), dst_order: NHWC, dst_shape: (23, 40, 4))
+[2025-08-20 14:05:42.188] [23904] [HailoRT] [info] [edge_elements.cpp:187] [create] Created (LastAsyncEl0PostInferEl6AsyncHwEl)
+[2025-08-20 14:05:42.189] [23904] [HailoRT] [info] [edge_elements.cpp:187] [create] Created (LastAsyncEl3AsyncHwEl)
+[2025-08-20 14:05:42.189] [23904] [HailoRT] [info] [queue_elements.cpp:450] [create] Created (PushQEl8AsyncHwEl | timeout: 10s)
+[2025-08-20 14:05:42.189] [23904] [HailoRT] [info] [filter_elements.cpp:375] [create] Created (PostInferEl8AsyncHwEl | Reorder - src_order: NHCW, src_shape: (46, 80, 4), dst_order: NHWC, dst_shape: (46, 80, 4))
+[2025-08-20 14:05:42.189] [23904] [HailoRT] [info] [edge_elements.cpp:187] [create] Created (LastAsyncEl0PostInferEl8AsyncHwEl)
+[2025-08-20 14:05:42.190] [23904] [HailoRT] [info] [queue_elements.cpp:450] [create] Created (PushQEl7AsyncHwEl | timeout: 10s)
+[2025-08-20 14:05:42.190] [23904] [HailoRT] [info] [filter_elements.cpp:375] [create] Created (PostInferEl7AsyncHwEl | Reorder - src_order: FCR, src_shape: (46, 80, 24), dst_order: FCR, dst_shape: (46, 80, 20))
+[2025-08-20 14:05:42.190] [23904] [HailoRT] [info] [edge_elements.cpp:187] [create] Created (LastAsyncEl0PostInferEl7AsyncHwEl)
+[2025-08-20 14:05:42.190] [23904] [HailoRT] [info] [queue_elements.cpp:450] [create] Created (PushQEl2AsyncHwEl | timeout: 10s)
+[2025-08-20 14:05:42.190] [23904] [HailoRT] [info] [filter_elements.cpp:375] [create] Created (PostInferEl2AsyncHwEl | Reorder - src_order: NHCW, src_shape: (23, 40, 8), dst_order: NHWC, dst_shape: (23, 40, 8))
+[2025-08-20 14:05:42.190] [23904] [HailoRT] [info] [edge_elements.cpp:187] [create] Created (LastAsyncEl0PostInferEl2AsyncHwEl)
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [queue_elements.cpp:450] [create] Created (PushQEl4AsyncHwEl | timeout: 10s)
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [filter_elements.cpp:375] [create] Created (PostInferEl4AsyncHwEl | Reorder - src_order: FCR, src_shape: (23, 40, 24), dst_order: FCR, dst_shape: (23, 40, 20))
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [edge_elements.cpp:187] [create] Created (LastAsyncEl0PostInferEl4AsyncHwEl)
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] EntryPushQEl0retinaface_mobilenet_v1/input_layer1 | inputs: user | outputs: AsyncHwEl(running in thread_id: 23944)
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] AsyncHwEl | inputs: EntryPushQEl0retinaface_mobilenet_v1/input_layer1[0] | outputs: LastAsyncEl0AsyncHwEl LastAsyncEl1AsyncHwEl PushQEl2AsyncHwEl LastAsyncEl3AsyncHwEl PushQEl4AsyncHwEl PushQEl5AsyncHwEl PushQEl6AsyncHwEl PushQEl7AsyncHwEl PushQEl8AsyncHwEl
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] LastAsyncEl0AsyncHwEl | inputs: AsyncHwEl[0] | outputs: user
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] LastAsyncEl1AsyncHwEl | inputs: AsyncHwEl[0] | outputs: user
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] PushQEl2AsyncHwEl | inputs: AsyncHwEl[0] | outputs: PostInferEl2AsyncHwEl(running in thread_id: 23949)
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] PostInferEl2AsyncHwEl | inputs: PushQEl2AsyncHwEl[0] | outputs: LastAsyncEl0PostInferEl2AsyncHwEl
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] LastAsyncEl0PostInferEl2AsyncHwEl | inputs: PostInferEl2AsyncHwEl[0] | outputs: user
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] LastAsyncEl3AsyncHwEl | inputs: AsyncHwEl[0] | outputs: user
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] PushQEl4AsyncHwEl | inputs: AsyncHwEl[0] | outputs: PostInferEl4AsyncHwEl(running in thread_id: 23950)
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] PostInferEl4AsyncHwEl | inputs: PushQEl4AsyncHwEl[0] | outputs: LastAsyncEl0PostInferEl4AsyncHwEl
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] LastAsyncEl0PostInferEl4AsyncHwEl | inputs: PostInferEl4AsyncHwEl[0] | outputs: user
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] PushQEl5AsyncHwEl | inputs: AsyncHwEl[0] | outputs: PostInferEl5AsyncHwEl(running in thread_id: 23945)
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] PostInferEl5AsyncHwEl | inputs: PushQEl5AsyncHwEl[0] | outputs: LastAsyncEl0PostInferEl5AsyncHwEl
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] LastAsyncEl0PostInferEl5AsyncHwEl | inputs: PostInferEl5AsyncHwEl[0] | outputs: user
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] PushQEl6AsyncHwEl | inputs: AsyncHwEl[0] | outputs: PostInferEl6AsyncHwEl(running in thread_id: 23946)
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] PostInferEl6AsyncHwEl | inputs: PushQEl6AsyncHwEl[0] | outputs: LastAsyncEl0PostInferEl6AsyncHwEl
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] LastAsyncEl0PostInferEl6AsyncHwEl | inputs: PostInferEl6AsyncHwEl[0] | outputs: user
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] PushQEl7AsyncHwEl | inputs: AsyncHwEl[0] | outputs: PostInferEl7AsyncHwEl(running in thread_id: 23948)
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] PostInferEl7AsyncHwEl | inputs: PushQEl7AsyncHwEl[0] | outputs: LastAsyncEl0PostInferEl7AsyncHwEl
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] LastAsyncEl0PostInferEl7AsyncHwEl | inputs: PostInferEl7AsyncHwEl[0] | outputs: user
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] PushQEl8AsyncHwEl | inputs: AsyncHwEl[0] | outputs: PostInferEl8AsyncHwEl(running in thread_id: 23947)
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] PostInferEl8AsyncHwEl | inputs: PushQEl8AsyncHwEl[0] | outputs: LastAsyncEl0PostInferEl8AsyncHwEl
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] LastAsyncEl0PostInferEl8AsyncHwEl | inputs: PostInferEl8AsyncHwEl[0] | outputs: user
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [hef.cpp:1929] [get_network_group_and_network_name] No name was given. Addressing all networks of default network_group: retinaface_mobilenet_v1
+[2025-08-20 14:05:42.191] [23904] [HailoRT] [info] [hef.cpp:1929] [get_network_group_and_network_name] No name was given. Addressing all networks of default network_group: retinaface_mobilenet_v1
+[2025-08-20 14:05:45.049] [23761] [HailoRT] [info] [device.cpp:49] [Device] OS Version: Linux 6.12.34+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.34-1+rpt1~bookworm (2025-06-26) aarch64
+[2025-08-20 14:05:45.050] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:05:45.051] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:05:45.071] [23904] [HailoRT] [info] [device.cpp:49] [Device] OS Version: Linux 6.12.34+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.34-1+rpt1~bookworm (2025-06-26) aarch64
+[2025-08-20 14:05:45.072] [23904] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:05:45.073] [23904] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:05:45.103] [23904] [HailoRT] [info] [vdevice.cpp:523] [create] Creating vdevice with params: device_count: 1, scheduling_algorithm: ROUND_ROBIN, multi_process_service: true
+[2025-08-20 14:05:46.105] [23904] [HailoRT] [info] [device.cpp:49] [Device] OS Version: Linux 6.12.34+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.34-1+rpt1~bookworm (2025-06-26) aarch64
+[2025-08-20 14:05:46.106] [23904] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:05:46.119] [23904] [HailoRT] [info] [hef.cpp:1929] [get_network_group_and_network_name] No name was given. Addressing all networks of default network_group: arcface_mobilefacenet
+[2025-08-20 14:05:46.119] [23904] [HailoRT] [info] [hef.cpp:1929] [get_network_group_and_network_name] No name was given. Addressing all networks of default network_group: arcface_mobilefacenet
+[2025-08-20 14:05:46.144] [23904] [HailoRT] [info] [infer_model.cpp:436] [configure] Configuring network group 'arcface_mobilefacenet' with params: batch size: 0, power mode: ULTRA_PERFORMANCE, latency: NONE
+[2025-08-20 14:05:46.144] [23904] [HailoRT] [info] [multi_io_elements.cpp:756] [create] Created (AsyncHwEl)
+[2025-08-20 14:05:46.172] [23904] [HailoRT] [info] [queue_elements.cpp:450] [create] Created (EntryPushQEl0arcface_mobilefacenet/input_layer1 | timeout: 10s)
+[2025-08-20 14:05:46.172] [23904] [HailoRT] [info] [edge_elements.cpp:187] [create] Created (LastAsyncEl0AsyncHwEl)
+[2025-08-20 14:05:46.172] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] EntryPushQEl0arcface_mobilefacenet/input_layer1 | inputs: user | outputs: AsyncHwEl(running in thread_id: 24073)
+[2025-08-20 14:05:46.172] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] AsyncHwEl | inputs: EntryPushQEl0arcface_mobilefacenet/input_layer1[0] | outputs: LastAsyncEl0AsyncHwEl
+[2025-08-20 14:05:46.172] [23904] [HailoRT] [info] [pipeline.cpp:891] [print_deep_description] LastAsyncEl0AsyncHwEl | inputs: AsyncHwEl[0] | outputs: user
+[2025-08-20 14:05:46.172] [23904] [HailoRT] [info] [hef.cpp:1929] [get_network_group_and_network_name] No name was given. Addressing all networks of default network_group: arcface_mobilefacenet
+[2025-08-20 14:05:46.172] [23904] [HailoRT] [info] [hef.cpp:1929] [get_network_group_and_network_name] No name was given. Addressing all networks of default network_group: arcface_mobilefacenet
+[2025-08-20 14:07:01.772] [23761] [HailoRT] [info] [device.cpp:49] [Device] OS Version: Linux 6.12.34+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.34-1+rpt1~bookworm (2025-06-26) aarch64
+[2025-08-20 14:07:01.773] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:07:01.774] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:07:02.339] [23761] [HailoRT] [info] [device.cpp:49] [Device] OS Version: Linux 6.12.34+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.34-1+rpt1~bookworm (2025-06-26) aarch64
+[2025-08-20 14:07:02.341] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:07:02.342] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:08:04.228] [23761] [HailoRT] [info] [device.cpp:49] [Device] OS Version: Linux 6.12.34+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.34-1+rpt1~bookworm (2025-06-26) aarch64
+[2025-08-20 14:08:04.231] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:08:04.233] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:08:04.801] [23761] [HailoRT] [info] [device.cpp:49] [Device] OS Version: Linux 6.12.34+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.34-1+rpt1~bookworm (2025-06-26) aarch64
+[2025-08-20 14:08:04.802] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0
+[2025-08-20 14:08:04.803] [23761] [HailoRT] [info] [control.cpp:108] [control__parse_identify_results] firmware_version is: 4.20.0

@@ -3,9 +3,9 @@ from sqlalchemy.orm import relationship, Session
 from sqlalchemy.exc import SQLAlchemyError
 
 
-def db_create_table_registered_person(db, dbModel):
+def db_create_table_registered_person(db, dbModel, table_name):
     class RegisteredPerson(dbModel):
-        __tablename__ = "person"
+        __tablename__ = table_name
         id = db.Column(db.Integer, primary_key=True)
         name = db.Column(db.String, nullable=False)
         key_face_id = db.Column(db.String(36), nullable=True)
@@ -13,7 +13,7 @@ def db_create_table_registered_person(db, dbModel):
         is_deleted = db.Column(db.Boolean, default=False, nullable=False)
 
         faces = relationship(
-            "Face", back_populates="person", cascade="all, delete-orphan"
+            "face", back_populates="person", cascade="all, delete-orphan"
         )
 
         def __init__(

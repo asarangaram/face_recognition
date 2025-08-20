@@ -6,7 +6,7 @@ import degirum_tools
 class HostedModel:
     def __init__(self):
         self.inference_host_address = "@local"
-        self.zoo_url = "degirum/hailo"
+        self.zoo_url = "./zoo"
         self.token = '' 
         self.device_type = "HAILORT/HAILO8"
 
