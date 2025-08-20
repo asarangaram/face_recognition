@@ -68,20 +68,57 @@ class FaceRecognizer:
 
     def register_face(
         self, path: str, person_id: int = None, person_name: str = None
-    ) -> Tuple[Optional[RegisteredFace], Optional[str]]:
+    ) -> Optional[RegisteredFace]:
         """
         POST /faces/register
+
         """
-        aligned_faces = self.detect_and_align_faces(path=path)
+        logging.info(f'register_face: {f"id={person_id}" if person_id else f"name={person_name}"} -> {path}')
+        detector = DetectionModel()
+        detected_faces = detector.scan(path=path)
 
-        if len(aligned_faces) == 0:
-            raise Exception("No face found")
+        num_faces = len(detected_faces.results)
+        if num_faces > 1:
+            logging.warning(
+                f"Skipped {detected_faces.info} as it contains more than one face ({num_faces} faces detected)."
+            )
+            return None
+        elif num_faces == 0:
+            logging.warning(f"Skipped {detected_faces.info} as no faces were detected.")
+            return None
 
-        f = self.RegisteredFace.create(person_id=person_id, person_name=person_name)
-        person = f.person
-        # now that we have id, find embedding and store vector with f.id
-        # once successful, save the image for future reference
-        return RegisteredFace(id=f.id, person_id=person.id, person_name=person.name)
+        result = detected_faces.results[0]
+
+        aligned_img, _ = align_and_crop(
+            detected_faces.image,
+            [landmark["landmark"] for landmark in result["landmarks"]],
+        )
+        embedding_model = EmbeddingModel()
+        face_embedding = embedding_model.extract_face_embedding(aligned_img)
+        result = detected_faces.results[0]
+
+        face = self.save_face(
+            identity=person_id if person_id else person_name,
+            aligned_img=aligned_img,
+            face_embedding=face_embedding,
+        )
+
+        if self.is_interactive:
+            self.show_face(face)
+
+        return face
+
+    def register_faces_no_batch(self, faces: List[Tuple[Union[int, str], str]]):
+        registerd_faces = []
+        for identity, path in faces:
+            face = None
+            if isinstance(identity, int):
+                face = self.register_face(path=path, person_id=identity)
+            elif isinstance(identity, str):
+                face = self.register_face(path=path, person_name=identity)
+            if face:
+                registerd_faces.append(face)
+        return registerd_faces
 
     def register_faces(
         self, faces: List[Tuple[Union[int, str], str]]
