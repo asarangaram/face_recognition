@@ -28,6 +28,8 @@ class FaceVectorStore(LanceTableManager):
     def add(self, id: str, vector: Annotated[List[float], Vector(512)]):
         self.tbl.add([FaceRecognitionSchema(id=id, vector=vector)])
 
+        
+
     def remove(self, id: str):
         self.tbl.delete(f"id = '{id}'")
         pass
@@ -37,19 +39,20 @@ class FaceVectorStore(LanceTableManager):
         vector: Annotated[List[float], Vector(512)],
         threshold: float = 0.85,
         count: int = 1,
-    ):
-        items_found = (
-            self.tbl.search(vector, vector_column_name="vector")
-            .metric("cosine")
-            .limit(count)
-            .to_list()
-        )
+    ) -> list[str, float]:
+        
+        print(f"Schema: {self.tbl.schema}")
+
+        #print(type(vector))
+        #items_found = self.tbl.search(vector, vector_column_name="vector").metric("cosine").limit(count)
+        #print(items_found)
+        
 
         result = []
-        for item in items_found:
-            similarity_score = round(1 - item["_distance"], 2)
-            if similarity_score >= threshold:
-                result.append((item["id"], similarity_score))
+        # for item in items_found:
+        #    similarity_score = round(1 - item["_distance"], 2)
+        #    if similarity_score >= threshold:
+        #        result.append((item["id"], similarity_score))
         return result
 
     def searchById(self, id: str):

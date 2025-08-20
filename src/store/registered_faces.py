@@ -5,7 +5,7 @@ import uuid
 
 
 def db_create_table_registered_faces(db, dbModel):
-    class RegisteredFace(dbModel):
+    class RegisteredFaceInDB(dbModel):
         __tablename__ = "faces"
 
         id = db.Column(
@@ -15,7 +15,7 @@ def db_create_table_registered_faces(db, dbModel):
         person_id = db.Column(db.Integer, db.ForeignKey("person.id"), nullable=False)
 
         # Relationship back to Person
-        person = relationship("RegisteredPerson", back_populates="faces")
+        person = relationship("RegisteredPersonInDB", back_populates="faces")
 
         def __init__(self, person_id: int, path: str, _allow_direct_init: bool = False):
             if not _allow_direct_init:
@@ -77,4 +77,4 @@ def db_create_table_registered_faces(db, dbModel):
                 session.rollback()
                 raise ValueError(f"Failed to delete face: {str(e)}")
 
-    return RegisteredFace
+    return RegisteredFaceInDB

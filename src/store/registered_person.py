@@ -4,7 +4,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 
 def db_create_table_registered_person(db, dbModel):
-    class RegisteredPerson(dbModel):
+    class RegisteredPersonInDB(dbModel):
         __tablename__ = "person"
         id = db.Column(db.Integer, primary_key=True)
         name = db.Column(db.String, nullable=False)
@@ -13,7 +13,7 @@ def db_create_table_registered_person(db, dbModel):
         is_deleted = db.Column(db.Boolean, default=False, nullable=False)
 
         faces = relationship(
-            "RegisteredFace", back_populates="person", cascade="all, delete-orphan"
+            "RegisteredFaceInDB", back_populates="person", cascade="all, delete-orphan"
         )
 
         def __init__(
@@ -132,4 +132,4 @@ def db_create_table_registered_person(db, dbModel):
                 session.rollback()
                 raise ValueError(f"Failed to hard delete person: {str(e)}")
 
-    return RegisteredPerson
+    return RegisteredPersonInDB

@@ -1,7 +1,14 @@
 import argparse
 from pathlib import Path
+import logging
+
 from store_init import init_store
 
+logging.basicConfig(
+    level=logging.WARNING,  # global default
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 
 if __name__ == "__main__":
@@ -23,19 +30,34 @@ if __name__ == "__main__":
         required=False,
         help="One or more dataset directories containing face images",
     )
+    parser.add_argument(
+        "--recognize",
+        nargs="+",
+        required=False,
+        help="One or more images to recognize faces in it",
+    )
     args = parser.parse_args()
-
+    
+    
     rebuild_store = args.rebuild_store
+    if rebuild_store:
+        logger.warning(f"Rebuild Requested")
+
     preserve_past = not rebuild_store
     recogniser = init_store(args.face_store_dir, preserve_past=preserve_past)
 
     if rebuild_store and args.faces:
-        all_faces = []
         for path in args.faces:
+            logger.warning(f"Scan folder {path} for faces")
+            all_faces = []
             for file in Path(path).rglob("*"):
                 if file.suffix.lower() in (".png", ".jpg", ".jpeg"):
                     all_faces.append((file.stem.split("_")[0], str(file)))
-
-        face_ids = recogniser.register_faces_no_batch(all_faces)
-        print(f"Available faces: {len(all_faces)}")
-        print(f"Registered faces: {len(face_ids)}")
+            face_ids = recogniser.register_faces_no_batch(all_faces)
+            logger.warning(f"Found {len(all_faces)} images and registered {len(face_ids)} faces")
+            if len(face_ids) < len(all_faces):
+                logger.warning("Some images were skipped as there is no face in main faces in a single image ")
+    if args.recognize:
+        for path in args.recognize:
+            recogniser.recognize_faces(path)
+        

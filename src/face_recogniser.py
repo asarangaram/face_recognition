@@ -18,9 +18,11 @@ from src.store.face_vector_store import (
     FaceVectorStore,
 )
 
-from src.face import DetectedFace, KnownFace
+from src.face import DetectedFace, Face, KnownFace
 from src.proc.face_detection import DetectionModel, EmbeddingModel
 from src.proc.align_and_crop import align_and_crop
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -70,21 +72,23 @@ class FaceRecognizer:
         self, path: str, person_id: int = None, person_name: str = None
     ) -> Optional[RegisteredFace]:
         """
-        POST /faces/register
+        POST /register/face
 
         """
-        logging.info(f'register_face: {f"id={person_id}" if person_id else f"name={person_name}"} -> {path}')
+        logger.info(
+            f'register_face: {f"id={person_id}" if person_id else f"name={person_name}"} -> {path}'
+        )
         detector = DetectionModel()
         detected_faces = detector.scan(path=path)
 
         num_faces = len(detected_faces.results)
         if num_faces > 1:
-            logging.warning(
+            logger.warning(
                 f"Skipped {detected_faces.info} as it contains more than one face ({num_faces} faces detected)."
             )
             return None
         elif num_faces == 0:
-            logging.warning(f"Skipped {detected_faces.info} as no faces were detected.")
+            logger.warning(f"Skipped {detected_faces.info} as no faces were detected.")
             return None
 
         result = detected_faces.results[0]
@@ -95,9 +99,9 @@ class FaceRecognizer:
         )
         embedding_model = EmbeddingModel()
         face_embedding = embedding_model.extract_face_embedding(aligned_img)
-        result = detected_faces.results[0]
+        
 
-        face = self.save_face(
+        face = self._save_face(
             identity=person_id if person_id else person_name,
             aligned_img=aligned_img,
             face_embedding=face_embedding,
@@ -141,12 +145,12 @@ class FaceRecognizer:
         for identity, detected_faces in zip(identities, detected_faces_batch):
             num_faces = len(detected_faces.results)
             if num_faces > 1:
-                logging.warning(
+                logger.warning(
                     f"Skipped {detected_faces.info} as it contains more than one face ({num_faces} faces detected)."
                 )
                 continue
             elif num_faces == 0:
-                logging.warning(
+                logger.warning(
                     f"Skipped {detected_faces.info} as no faces were detected."
                 )
                 continue
@@ -160,7 +164,7 @@ class FaceRecognizer:
             face_embedding = embedding_model.extract_face_embedding(aligned_img)
             result = detected_faces.results[0]
             embedding.append((identity, aligned_img, face_embedding))
-            face = self.save_face(
+            face = self._save_face(
                 identity=identity,
                 aligned_img=aligned_img,
                 face_embedding=face_embedding,
@@ -169,12 +173,9 @@ class FaceRecognizer:
             if face:
                 saved_faces.append(face)
 
-        if self.is_interactive:
-            self.show_faces(saved_faces)
-
         return saved_faces
 
-    def save_face(self, identity, aligned_img, face_embedding) -> RegisteredFace:
+    def _save_face(self, identity, aligned_img, face_embedding) -> RegisteredFace:
         person = None
         if isinstance(identity, int):  # Id is provided.
             person = self.RegisteredPerson.get_person(id=identity)
@@ -183,19 +184,20 @@ class FaceRecognizer:
             pass
 
         if not person:
-            logging.warning(f"failed to get person with identity: {identity}")
+            logger.warning(f"failed to get person with identity: {identity}")
             return None
-        file_name = self.save_file(name=f"{person.name}_{person.id}", img=aligned_img)
+        file_name = self._save_file(name=f"{person.name}_{person.id}", img=aligned_img)
         face = self.RegisteredFace.create(person_id=person.id, path=file_name)
         if not face:
-            logging.warning(f"failed to get save face for identity {identity}")
+            logger.warning(f"failed to get save face for identity {identity}")
             os.unlink(Path.joinpath(self.face_dir, f"{file_name}.png"))
             return None
         self.faceVectorStore.add(id=face.id, vector=face_embedding)
+        return RegisteredFace(
+            id=face.id, person_id=face.person.id, person_name=face.person.name
+        )
 
-        return face
-
-    def save_file(
+    def _save_file(
         self, name: str, img: Union[np.ndarray, Image.Image], ext="png"
     ) -> Path:
         """
@@ -259,7 +261,7 @@ class FaceRecognizer:
 
     def get_person(self, id: int) -> RegisteredPerson:
         """
-        GET /persons/{id}
+        GET /person/{id}
         """
         item = self.RegisteredPerson.get_person(id=id)
         return RegisteredPerson(
@@ -268,15 +270,16 @@ class FaceRecognizer:
 
     def get_face(self, id: int) -> str:
         """
-        GET /faces/{id}
+        GET /face/{id}
         - returns the image
         """
         face = self.RegisteredFace.get_face(id=id)
-        return face.path
+        file_name = f"{face.person.name}_{face.person.id}"
+        return Path.joinpath(self.face_dir, f"{file_name}.png")
 
     def get_person_by_face(self, id: int) -> RegisteredPerson:
         """
-        GET /faces/{id}/person
+        GET /face/{id}/person
         - returns the image
         """
         face = self.RegisteredFace.get_face(id=id)
@@ -304,7 +307,7 @@ class FaceRecognizer:
             id=item.id, name=item.name, key_face_id=item.key_face_id
         )
 
-    def reassign_to_person(
+    def update_face(
         self, face_id: int, new_person_id: int = None, new_person_name: str = None
     ) -> RegisteredFace:
         """
@@ -321,6 +324,24 @@ class FaceRecognizer:
         f = current.update(person_id=new_person_id)
         return RegisteredFace(id=f.id, person_id=person.id, person_name=person.name)
 
+    def recognize_faces(self, path:str) -> List[Face]:
+        detector = DetectionModel()
+        detected_faces = detector.scan(path=path)
+
+        num_faces = len(detected_faces.results)
+        print(f"{num_faces} faces found")
+        embedding_model = EmbeddingModel()
+        if detected_faces.results:
+            for face in detected_faces.results:
+                landmarks = [landmark["landmark"] for landmark in face["landmarks"]]
+                aligned_face, _ = align_and_crop(detected_faces.image, landmarks)
+                face_embedding = embedding_model.extract_face_embedding(aligned_face)
+                print(type(face_embedding))
+                matches = self.faceVectorStore.searchByVector(face_embedding, count=2)
+                print(matches)
+                
+
+        
     def detect_and_align_faces(
         self, path: str
     ) -> List[Tuple[np.array, list, DetectedFace]]:
@@ -340,34 +361,4 @@ class FaceRecognizer:
             )
         return aligned_faces
 
-    def show_image(self, image, title="Images", figsize=(15, 5)):
-
-        img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        plt.imshow(img_rgb)
-        plt.axis("off")  # optional: hides the axes
-        plt.show()
-
-    def get_face_path(self, face):
-        file_name = f"{face.person.name}_{face.person.id}"
-        return Path.joinpath(self.face_dir, f"{file_name}.png")
-
-    def show_faces(self, faces: List, per_row=8):
-        n_images = len(faces)
-        n_rows = math.ceil(n_images / per_row)
-
-        fig, axes = plt.subplots(n_rows, per_row, figsize=(per_row * 2, n_rows * 2))
-        axes = axes.flatten()  # flatten in case of multiple rows
-
-        for i in range(len(axes)):
-            axes[i].axis("off")  # hide axes
-            if i < n_images:
-                img = Image.open(self.get_face_path(faces[i]))
-
-                # If image is BGR (from OpenCV), convert to RGB
-                if img.shape[-1] == 3 and img.dtype == "uint8":
-                    img = img[..., ::-1]  # simple BGR -> RGB
-                axes[i].imshow(img, cmap="gray" if img.ndim == 2 else None)
-                axes[i].set_title(faces[i].person.name, fontsize=8)
-
-        plt.tight_layout()
-        plt.show()
+   
