@@ -9,6 +9,8 @@ from src.face_recogniser import FaceRecognizer
 
 
 def create_db(path, preserve_past: bool = True):
+    directory = os.path.dirname(path)
+    os.makedirs(directory, exist_ok=True)
     engine = sa.create_engine(f"sqlite:///{path}", echo=False)
     SessionLocal = sessionmaker(bind=engine)
     session = SessionLocal()
@@ -35,6 +37,8 @@ import lancedb
 
 
 def create_vector_db(path, preserve_past: bool = True):
+    directory = os.path.dirname(path)
+    os.makedirs(directory, exist_ok=True)
     db = lancedb.connect(path)
     if not preserve_past:
         for table_name in FaceRecognizer.vector_tables():

@@ -1,5 +1,3 @@
-face_vector_store.db
 **/*.pyc
-face_store.db
 hailort.log
-face_images/**
+face_store/**
