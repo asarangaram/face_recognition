@@ -4,19 +4,20 @@ from sqlalchemy.exc import SQLAlchemyError
 import uuid
 
 
-
 def db_create_table_registered_faces(db, dbModel, face_dir):
     class RegisteredFace(dbModel):
         __tablename__ = "face"
 
-        id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+        id = db.Column(
+            db.String(36), primary_key=True, default=lambda: str(uuid.uuid4())
+        )
         path = db.Column(db.String, nullable=False)
         person_id = db.Column(db.Integer, db.ForeignKey("person.id"), nullable=False)
 
         # Relationship back to Person
         person = relationship("Person", back_populates="faces")
 
-        def __init__(self, person_id: int, path:str, _allow_direct_init: bool = False):
+        def __init__(self, person_id: int, path: str, _allow_direct_init: bool = False):
             if not _allow_direct_init:
                 raise TypeError("Use Face.create() to instantiate a Face object")
             self.person_id = person_id
@@ -31,7 +32,7 @@ def db_create_table_registered_faces(db, dbModel, face_dir):
             if hasattr(db, "session"):
                 return db.session
             raise RuntimeError("No session available: provide a SQLAlchemy session")
-        
+
         # --- Get by ID ---
         @classmethod
         def get_face(cls, id: str) -> Optional[Self]:
@@ -40,7 +41,7 @@ def db_create_table_registered_faces(db, dbModel, face_dir):
 
         # --- Create ---
         @classmethod
-        def create(cls, person_id: int, path:str) -> Self:
+        def create(cls, person_id: int, path: str) -> Self:
             session = cls._session()
             face = cls(person_id=person_id, path=path, _allow_direct_init=True)
             try:
@@ -65,7 +66,6 @@ def db_create_table_registered_faces(db, dbModel, face_dir):
                 session.rollback()
                 raise ValueError(f"Failed to update person: {str(e)}")
             return self
-        
 
         # --- Delete ---
         def delete(self):

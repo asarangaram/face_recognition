@@ -2,6 +2,7 @@ from typing import List, Optional, Self
 from sqlalchemy.orm import relationship, Session
 from sqlalchemy.exc import SQLAlchemyError
 
+
 def db_create_table_registered_person(db, dbModel):
     class RegisteredPerson(dbModel):
         __tablename__ = "person"
@@ -11,7 +12,9 @@ def db_create_table_registered_person(db, dbModel):
         is_hidden = db.Column(db.Boolean, default=False, nullable=False)
         is_deleted = db.Column(db.Boolean, default=False, nullable=False)
 
-        faces = relationship("Face", back_populates="person", cascade="all, delete-orphan")
+        faces = relationship(
+            "Face", back_populates="person", cascade="all, delete-orphan"
+        )
 
         def __init__(
             self,
