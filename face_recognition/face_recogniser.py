@@ -11,13 +11,16 @@ from typing import Union
 from PIL import Image
 import numpy as np
 
-from .store.registered_faces import db_create_table_registered_faces
-from .store.registered_person import db_create_table_registered_person
-from .store.face_vector_store import FaceRecognitionSchema, FaceVectorStore
+from face_recognition.store.registered_faces import db_create_table_registered_faces
+from face_recognition.store.registered_person import db_create_table_registered_person
+from face_recognition.store.face_vector_store import (
+    FaceRecognitionSchema,
+    FaceVectorStore,
+)
 
-from .face import DetectedFace, KnownFace
-from .proc.face_detection import DetectionModel, EmbeddingModel
-from .proc.align_and_crop import align_and_crop
+from face_recognition.face import DetectedFace, KnownFace
+from face_recognition.proc.face_detection import DetectionModel, EmbeddingModel
+from face_recognition.proc.align_and_crop import align_and_crop
 
 
 @dataclass
@@ -38,11 +41,10 @@ class FaceRecognizer:
     face_table_name = "face"
     face_vector_table = "face"
     person_table_name = "person"
-     
+
     @classmethod
     def vector_tables(cls):
         return [cls.face_vector_table]
-    
 
     @classmethod
     def tables(cls):
@@ -57,10 +59,12 @@ class FaceRecognizer:
         self.face_dir = face_dir
         self.is_interactive = is_interactive
 
-        self.RegisteredFace = db_create_table_registered_faces(db, dbModel,face_table_name=self.face_table_name, person_table_name=self.person_table_name)
-        self.RegisteredPerson = db_create_table_registered_person(db, dbModel, face_table_name=self.face_table_name, person_table_name=self.person_table_name)
-        
-        self.faceVectorStore = FaceVectorStore(vectordb, table_name=self.face_vector_table)
+        self.RegisteredFace = db_create_table_registered_faces(db, dbModel)
+        self.RegisteredPerson = db_create_table_registered_person(db, dbModel)
+
+        self.faceVectorStore = FaceVectorStore(
+            vectordb, table_name=self.face_vector_table
+        )
 
     def register_face(
         self, path: str, person_id: int = None, person_name: str = None
@@ -93,7 +97,7 @@ class FaceRecognizer:
 
         detector = DetectionModel()
         detected_faces_batch = list(detector.batch_scan(path=image_files))
-        
+
         embedding_model = EmbeddingModel()
         embedding = []
         saved_faces = []
@@ -117,51 +121,53 @@ class FaceRecognizer:
                 [landmark["landmark"] for landmark in result["landmarks"]],
             )
             face_embedding = embedding_model.extract_face_embedding(aligned_img)
-
             result = detected_faces.results[0]
-            embedding.append((identity,aligned_img, face_embedding ))
+            embedding.append((identity, aligned_img, face_embedding))
             face = self.save_face(
                 identity=identity,
                 aligned_img=aligned_img,
                 face_embedding=face_embedding,
             )
+
             if face:
                 saved_faces.append(face)
 
         if self.is_interactive:
             self.show_faces(saved_faces)
-            pass
-        return [KnownFace(face_id=face.id, person_id=face.person.id, person_name=face.person.name, confidence=1.0) for face in saved_faces]
 
-    def save_face(self, identity, aligned_img, face_embedding) :
+        return saved_faces
+
+    def save_face(self, identity, aligned_img, face_embedding) -> RegisteredFace:
         person = None
-        if isinstance(identity, int): # Id is provided.
+        if isinstance(identity, int):  # Id is provided.
             person = self.RegisteredPerson.get_person(id=identity)
-        elif  isinstance(identity, str):
+        elif isinstance(identity, str):
             person = self.RegisteredPerson.create(identity)
             pass
-        
+
         if not person:
             logging.warning(f"failed to get person with identity: {identity}")
             return None
-        file_name = self.save_file(name=f"{person.name}_{person.id}",img = aligned_img)
-        face = self.RegisteredFace.create(person_id=person.id, path = file_name)
+        file_name = self.save_file(name=f"{person.name}_{person.id}", img=aligned_img)
+        face = self.RegisteredFace.create(person_id=person.id, path=file_name)
         if not face:
             logging.warning(f"failed to get save face for identity {identity}")
-            os.unlink(Path.joinpath(self.face_dir,f"{file_name}.png" ))
+            os.unlink(Path.joinpath(self.face_dir, f"{file_name}.png"))
             return None
-        FaceVectorStore.add(face= FaceRecognitionSchema(id= face.id, vector=face_embedding))
-        return face
-    
+        self.faceVectorStore.add(id=face.id, vector=face_embedding)
 
-    def save_file(self, name: str, img: Union[np.ndarray, Image.Image], ext="png") -> Path:
+        return face
+
+    def save_file(
+        self, name: str, img: Union[np.ndarray, Image.Image], ext="png"
+    ) -> Path:
         """
         Save an image to `folder` with a unique name in the format <name>_n.ext.
         Returns the saved Path.
         """
         folder = Path(self.face_dir)
         folder.mkdir(parents=True, exist_ok=True)
-        
+
         counter = 1
         while True:
             file_name = f"{name}_{counter}"
@@ -177,13 +183,8 @@ class FaceRecognizer:
             Image.fromarray(img_rgb).save(file_path)
         else:
             raise TypeError("img must be a PIL Image or NumPy array")
-        
+
         return file_name
-
-    # Example usage:
-    # saved_path = save_unique_image("faces", "alice", img_array)
-    # print("Saved at:", saved_path)
-
 
     def forget_face(self, face_id: str) -> bool:
         """
@@ -302,34 +303,33 @@ class FaceRecognizer:
             )
         return aligned_faces
 
-    
     def show_image(self, image, title="Images", figsize=(15, 5)):
-        
+
         img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         plt.imshow(img_rgb)
-        plt.axis('off')  # optional: hides the axes
+        plt.axis("off")  # optional: hides the axes
         plt.show()
-    
+
     def get_face_path(self, face):
         file_name = f"{face.person.name}_{face.person.id}"
-        return Path.joinpath(self.face_dir,f"{file_name}.png" )
+        return Path.joinpath(self.face_dir, f"{file_name}.png")
 
-    def show_faces(self, faces:List, per_row=8):
+    def show_faces(self, faces: List, per_row=8):
         n_images = len(faces)
         n_rows = math.ceil(n_images / per_row)
-        
-        fig, axes = plt.subplots(n_rows, per_row, figsize=(per_row*2, n_rows*2))
+
+        fig, axes = plt.subplots(n_rows, per_row, figsize=(per_row * 2, n_rows * 2))
         axes = axes.flatten()  # flatten in case of multiple rows
 
         for i in range(len(axes)):
-            axes[i].axis('off')  # hide axes
+            axes[i].axis("off")  # hide axes
             if i < n_images:
                 img = Image.open(self.get_face_path(faces[i]))
-                
+
                 # If image is BGR (from OpenCV), convert to RGB
-                if img.shape[-1] == 3 and img.dtype == 'uint8':
+                if img.shape[-1] == 3 and img.dtype == "uint8":
                     img = img[..., ::-1]  # simple BGR -> RGB
-                axes[i].imshow(img, cmap='gray' if img.ndim==2 else None)
+                axes[i].imshow(img, cmap="gray" if img.ndim == 2 else None)
                 axes[i].set_title(faces[i].person.name, fontsize=8)
 
         plt.tight_layout()

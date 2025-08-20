@@ -50,3 +50,4 @@ class EmbeddingModel(HostedModel):
     
     def extract_face_embedding(self, image):
         face_embedding = self.model(image).results[0]["data"][0]
+        return face_embedding
