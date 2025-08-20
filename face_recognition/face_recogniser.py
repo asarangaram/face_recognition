@@ -57,8 +57,8 @@ class FaceRecognizer:
         self.face_dir = face_dir
         self.is_interactive = is_interactive
 
-        self.RegisteredFace = db_create_table_registered_faces(db, dbModel, face_dir=self.face_dir, table_name=self.face_table_name)
-        self.RegisteredPerson = db_create_table_registered_person(db, dbModel, table_name=self.person_table_name)
+        self.RegisteredFace = db_create_table_registered_faces(db, dbModel,face_table_name=self.face_table_name, person_table_name=self.person_table_name)
+        self.RegisteredPerson = db_create_table_registered_person(db, dbModel, face_table_name=self.face_table_name, person_table_name=self.person_table_name)
         
         self.faceVectorStore = FaceVectorStore(vectordb, table_name=self.face_vector_table)
 
