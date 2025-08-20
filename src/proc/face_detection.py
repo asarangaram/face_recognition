@@ -2,7 +2,7 @@ from typing import List
 import degirum as dg
 import degirum_tools
 
-from face_recognition.proc.profiler import timed
+from src.proc.profiler import timed
 
 class HostedModel:
     def __init__(self):

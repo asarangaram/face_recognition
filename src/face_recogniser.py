@@ -11,16 +11,16 @@ from typing import Union
 from PIL import Image
 import numpy as np
 
-from face_recognition.store.registered_faces import db_create_table_registered_faces
-from face_recognition.store.registered_person import db_create_table_registered_person
-from face_recognition.store.face_vector_store import (
+from src.store.registered_faces import db_create_table_registered_faces
+from src.store.registered_person import db_create_table_registered_person
+from src.store.face_vector_store import (
     FaceRecognitionSchema,
     FaceVectorStore,
 )
 
-from face_recognition.face import DetectedFace, KnownFace
-from face_recognition.proc.face_detection import DetectionModel, EmbeddingModel
-from face_recognition.proc.align_and_crop import align_and_crop
+from src.face import DetectedFace, KnownFace
+from src.proc.face_detection import DetectionModel, EmbeddingModel
+from src.proc.align_and_crop import align_and_crop
 
 
 @dataclass
