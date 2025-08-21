@@ -165,7 +165,7 @@ if __name__ == "__main__":
     logging.warning("API: vector_search ")
 
     candidates = {"/home/anandas/demos/degirum_hailo_examples/assets/Friends.jpg": 6,
-                  "/home/anandas/demos/degirum_hailo_examples/assets/Friends1.jpg": 5}
+                  "/home/anandas/demos/degirum_hailo_examples/assets/Friends1.jpg": 3}
 
     for path, face_count in candidates.items():
         detector = DetectionModel()
