@@ -1,4 +1,5 @@
 **/*.pyc
-hailort.log
+hailort*.log
 **/*.db
 **/*.store
+
