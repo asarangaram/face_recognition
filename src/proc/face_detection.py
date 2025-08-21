@@ -1,5 +1,6 @@
 from typing import List
 import degirum as dg
+import numpy as np
 
 from src.proc.profiler import timed
 
@@ -56,4 +57,5 @@ class EmbeddingModel(HostedModel):
     @timed
     def extract_face_embedding(self, image):
         face_embedding = self.model(image).results[0]["data"][0]
-        return face_embedding
+        face_vector = np.array(face_embedding, dtype=np.float32)
+        return face_vector
