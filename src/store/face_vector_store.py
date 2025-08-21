@@ -1,63 +1,41 @@
-from dataclasses import dataclass
 from lancedb.pydantic import LanceModel, Vector
 import uuid
 import numpy as np
-from typing import Annotated, List, Dict
+from typing import List, Dict
+import lancedb
+import logging
 
+logging.basicConfig(
+    level=logging.WARNING,  # global default
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 
 class FaceRecognitionSchema(LanceModel):
-    id: str
-    vector: Annotated[List[float], Vector(512)]
+    id: str  # Unique identifier for each entry
+    vector: Vector(512)  # Face embeddings, fixed size of 512
 
-
-class LanceTableManager:
-    def __init__(self, db, table_name: str, schema: type[LanceModel]):
-        if table_name not in db.table_names():
-            self.tbl = db.create_table(table_name, schema=schema)
-        else:
-            self.tbl = db.open_table(table_name)
-        schema_fields = [field.name for field in self.tbl.schema]
-        if schema_fields != list(schema.model_fields.keys()):
-            raise RuntimeError(f"Table {table_name} has a different schema.")
-
-
-class FaceVectorStore(LanceTableManager):
+class FaceVectorStore:
     def __init__(self, db, table_name: str):
-        super().__init__(db, table_name=table_name, schema=FaceRecognitionSchema)
-
-    def add(self, id: str, vector: Annotated[List[float], Vector(512)]):
-        self.tbl.add([FaceRecognitionSchema(id=id, vector=vector)])
-
-        
-
-    def remove(self, id: str):
-        self.tbl.delete(f"id = '{id}'")
-        pass
-
-    def searchByVector(
-        self,
-        vector: Annotated[List[float], Vector(512)],
-        threshold: float = 0.85,
-        count: int = 1,
-    ) -> list[str, float]:
-        
-        print(f"Schema: {self.tbl.schema}")
-
-        #print(type(vector))
-        #items_found = self.tbl.search(vector, vector_column_name="vector").metric("cosine").limit(count)
-        #print(items_found)
-        
-
-        result = []
-        # for item in items_found:
-        #    similarity_score = round(1 - item["_distance"], 2)
-        #    if similarity_score >= threshold:
-        #        result.append((item["id"], similarity_score))
-        return result
-
-    def searchById(self, id: str):
-        result = self.tbl.search().where(f"id = {id}").limit(1).to_list()
-        if result:
-            return result[0]
+        # Initialize the table
+        if table_name not in db.table_names():
+            tbl = db.create_table(table_name, schema=FaceRecognitionSchema)
         else:
-            return None
+            tbl = db.open_table(table_name)
+            schema_fields = [field.name for field in tbl.schema]
+            if schema_fields != list(FaceRecognitionSchema.model_fields.keys()):
+                raise RuntimeError(f"Table {table_name} has a different schema.")
+        self.tbl = tbl
+
+
+if __name__ == "__main__":
+    logging.info("WHERE AM I GOING")
+    # Database and table setup
+    uri = "./face_database_test.vec.db"
+    table_name = "face"
+
+    # Connect to the database
+    db = lancedb.connect(uri=uri)
+
+    vector_store =  FaceVectorStore(db=db, table_name=table_name)
+
+    print(vector_store.tbl.schema)

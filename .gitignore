@@ -1,3 +1,4 @@
 **/*.pyc
 hailort.log
-face_store/**
+**/*.db
+**/*.store
