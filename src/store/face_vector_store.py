@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     logging.info("Quite test LanceDB model")
     # Database and table setup
-    test_db_uri = "./face_database_test.vec.db"
+    test_db_uri = "./artifacts/face_database_test.vec.db"
     table_name = "face"
     if os.path.isdir(test_db_uri):
         shutil.rmtree(test_db_uri)
