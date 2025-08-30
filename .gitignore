@@ -3,3 +3,4 @@ hailort*.log
 **/*.db
 **/*.store
 
+.venv/**

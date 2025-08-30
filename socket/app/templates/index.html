@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask-SocketIO Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Connect to the SocketIO server.
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+            // Event listener for a response from the server.
+            socket.on('my_response', function(msg) {
+                $('#log').append('<br>Received: ' + msg.data);
+            });
+
+            // Function to send a message.
+            $('form#emit').submit(function(event) {
+                event.preventDefault();
+                socket.emit('my_event', {data: $('#emit_data').val()});
+                $('#log').append('<br>Sent: ' + $('#emit_data').val());
+                $('#emit_data').val('');
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Flask-SocketIO Chat</h1>
+    <form id="emit" method="POST" action='#'>
+        <input type="text" name="emit_data" id="emit_data" placeholder="Type a message">
+        <input type="submit" value="Send">
+    </form>
+    <div id="log"></div>
+</body>
+</html>
