@@ -3,22 +3,12 @@
 services:
   web:
     build: .
-    restart: always  # Add this line
-    volumes:
-      - ./app:/app
-      - uwsgi_sock:/tmp/sockets
-    command: uwsgi --ini /app/uwsgi.ini
-
-  nginx:
-    image: nginx:1.21-alpine
-    restart: always  # Add this line
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - uwsgi_sock:/tmp/sockets
+    #restart: always  # Add this line
     ports:
-      - "5002:80"
-    depends_on:
-      - web
+      - "5000:5000"
+    volumes:
+      - ./src:/app
+    container_name: python_chat_app
 
-volumes:
-  uwsgi_sock:
+    
+  

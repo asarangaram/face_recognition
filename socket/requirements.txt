@@ -2,3 +2,4 @@ Flask
 Flask-SocketIO
 uwsgi
 gevent
+Flask-WTF
