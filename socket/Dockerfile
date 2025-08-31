@@ -17,5 +17,5 @@ COPY ./src /app
 
 EXPOSE 5000
 
-CMD ["python",  "chat.py"]
+CMD ["gunicorn", "-k", "geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "-w", "2", "-b", "0.0.0.0:5000", "chat:application"]
 
