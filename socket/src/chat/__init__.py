@@ -13,7 +13,7 @@ application = create_app(debug=True)
 redis_url = os.getenv("REDIS_URL", None)
 
 if redis_url:
-    socketio.init_app(application, cors_allowed_origins="*", message_queue=redis_url)
+    socketio.init_app(application, cors_allowed_origins="*", message_queue=redis_url, async_mode="gevent")
 else:
     socketio.init_app(application)
 
