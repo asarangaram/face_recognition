@@ -1,14 +1,19 @@
 
-
 services:
   web:
     build: .
-    #restart: always  # Add this line
-    ports:
-      - "5000:5000"
+    command: >
+      gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker
+               -w 2 -b 0.0.0.0:5000 chat:application
     volumes:
       - ./src:/app
-    container_name: python_chat_app
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    ports:
+      - "5000:5000"
 
-    
+  redis:
+    image: redis:7-alpine
   

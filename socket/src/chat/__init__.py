@@ -5,10 +5,17 @@ monkey.patch_all()
 
 
 from app import create_app, socketio
+import os
 
-# Flask app
-application = create_app(debug=True)  # uWSGI will use this
+application = create_app(debug=True)
 
-# Local dev: run with SocketIO server
+# Redis for inter-worker communication
+redis_url = os.getenv("REDIS_URL", None)
+
+if redis_url:
+    socketio.init_app(application, message_queue=redis_url)
+else:
+    socketio.init_app(application)
+
 if __name__ == "__main__":
     socketio.run(application, host="0.0.0.0", port=5000)

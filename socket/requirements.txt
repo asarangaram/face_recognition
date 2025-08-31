@@ -4,3 +4,4 @@ gevent
 Flask-WTF
 gunicorn
 gevent-websocket
+redis
